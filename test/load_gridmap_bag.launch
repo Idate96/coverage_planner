@@ -1,0 +1,6 @@
+<launch>
+  <arg name="map_name" default="occupancy_map.bag"/>
+  <param name="map_path" value="$(find coverage_planner)/data/$(arg map_name)"/>
+  <node pkg="coverage_planner" type="load_map_bag" name="load_bag_map" output="screen"/>
+  <!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(find coverage_planner)/rviz/test_decomp.rviz" /> -->
+</launch>

@@ -1,0 +1,17 @@
+<launch>
+  <rosparam command="load" file="$(find coverage_planner)/config/image_to_gridmap.yaml" />
+
+  <!-- Load the image. -->
+  <node pkg="coverage_planner" type="image_publisher.py" name="image_publisher" output="screen">
+    <param name="image_path" value="$(find coverage_planner)/data/map.jpg" />
+    <param name="topic" value="~image" />
+  </node>
+
+  <node pkg="coverage_planner" type="image_to_gridmap" name="image_to_gridmap" output="screen" />
+
+  <!-- Launch the grid map visualizer -->
+  <node pkg="grid_map_visualization" type="grid_map_visualization" name="grid_map_visualization" output="screen" />
+
+  <!-- Launch RViz with the demo configuration -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find coverage_planner)/rviz/image_to_gridmap.rviz" />
+</launch>

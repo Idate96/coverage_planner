@@ -1,0 +1,6 @@
+devel_space: /home/lorenzo/git/coverage_planner/devel
+install: false
+install_space: /home/lorenzo/git/coverage_planner/install
+profile: default
+source_space: /home/lorenzo/git/coverage_planner/src
+workspace: /home/lorenzo/git/coverage_planner

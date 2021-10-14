@@ -1,0 +1,6 @@
+<launch>
+  <!-- Launch the grid map tutorial demo node -->
+  <test test-name="decomp_test" type="decomp_test.cpp" pkg="coverage_planner"/>
+  <!-- Launch RViz with the demo configuration -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find coverage_planner)/rviz/test_decomp.rviz" />
+</launch>

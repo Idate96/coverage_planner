@@ -1,0 +1,181 @@
+<launch>
+
+    <arg name="time_step"   default="0.01" />
+    <arg name="standalone"  default="false" />
+
+    <arg name="use_state_estimator" default="false" />
+    <arg name="controllers_file"    default="$(find m545_sim)/param/controllers.yaml" />
+
+    <!-- robot description loading parameters -->
+    <arg name="excavator_name"    default="m545"/>
+    <arg name="description_name"  default="/romo_mm_description"/>
+    <arg name="perfect_sensors"   default="false"/>
+    <arg name="fixed"             default="false"/>
+    <arg name="using_cabin_lidar" default="false"/>
+    <arg name="using_boom_lidar"  default="false"/>
+    <arg name="using_gps"         default="true"/>
+    <arg name="using_cabin_imu"   default="true"/>
+    <arg name="endeffector_type"  default="0"/> <!-- 0: Shovel, 1: gripper -->
+    <arg name="using_mega_ft"     default="false"/> <!-- false: don't use, true: do use rokubimega -->
+
+    <!-- Obstacle parameters -->
+    <arg name="has_obstacle"    default="false"/>
+    <arg name="obstacle_name"   default="bumps"/>
+
+    <!-- Set the initial pose of the robot -->
+    <arg name="x"               default="0.0"/>
+    <arg name="y"               default="0.0"/>
+    <arg name="z"               default="0.8"/>
+    <arg name="roll"            default="0.0"/>
+    <arg name="pitch"           default="0.0"/>
+    <arg name="yaw"             default="0.0"/>
+
+    <!-- Gazebo config parameters -->
+    <arg name="paused"        default="false"/>
+    <arg name="use_sim_time"  default="true"/>
+    <arg name="gui"           default="false"/>
+    <arg name="headless"      default="false"/>
+    <arg name="debug"         default="false"/>
+    <arg name="verbose"       default="false"/>
+    <arg name="model_path"    default="$(find m545_gazebo)/.."/>
+    <arg name="world"         default="empty"/>
+    <arg name="world_path"    default="$(find m545_gazebo)/worlds/$(arg world).world"/>
+    <arg name="gazebo_config" default="default"/>
+
+    <!-- Rviz config parameters -->
+    <arg name="use_rviz" default="true"/>
+    <arg name="rviz_config" default="empty"/>
+
+    <!-- Gazebo2Rviz parameters -->
+    <arg name="use_gazebo2viz" default="false"/>
+
+    <!-- Joy node parameters -->
+    <arg name="use_joy"           default="true"/>
+    <arg name="joystick_name"     default="js0" />
+    <arg name="joystick_deadzone" default="0.2" />
+    <arg name="joystick_type"     default="4" /> <!-- Joystick Type / 0: CAD (3dConnexion) / 1: M545 cockpit / 2: wireless XBOX / 3: wired XBOX / 4: Logitech F710 -->
+
+    <!-- Track offset config file -->
+    <arg name="track_offset_file" default="$(find m545_sim)/param/trackOffsets.txt" />
+
+    <!-- if state estimator is not used, map ground truth topic -->
+    <remap unless="$(arg use_state_estimator)" from="/m545_state_groundtruth" to="/m545_state"/>
+
+    <!-- Load robot description -->
+    <include file="$(find m545_description_ros)/launch/load.launch">
+        <arg name="excavator_name"      value="$(arg excavator_name)"/>
+        <arg name="simulation"          value="true"/>
+        <arg name="perfect_sensors"     value="$(arg perfect_sensors)"/>
+        <arg name="fixed"               value="$(arg fixed)"/>
+        <arg name="using_cabin_lidar"   value="$(arg using_cabin_lidar)"/>
+        <arg name="using_boom_lidar"    value="$(arg using_boom_lidar)"/>
+        <arg name="using_gps"           value="$(arg using_gps)"/>
+        <arg name="using_cabin_imu"     value="$(arg using_cabin_imu)"/>
+        <arg name="using_reduced_model" value="false"/>
+        <arg name="endeffector_type"    value="$(arg endeffector_type)"/>
+        <arg name="description_name"    value="$(arg description_name)"/>
+        <arg name="using_mega_ft"       value="$(arg using_mega_ft)"/>
+    </include>
+
+    <!-- Launch the gazebo simulation -->
+    <include file="$(find m545_gazebo)/launch/gazebo.launch">
+        <arg name="excavator_name"       value="$(arg excavator_name)"/>
+        <arg name="model_path"           value="$(arg model_path)"/>
+        <arg name="world"                value="$(arg world)"/>
+        <arg name="world_path"           value="$(arg world_path)"/>
+        <arg name="load_description"     value="false"/>
+        <arg name="perfect_sensors"      value="$(arg perfect_sensors)"/>
+        <arg name="fixed"                value="$(arg fixed)"/>
+        <arg name="using_cabin_lidar"    value="$(arg using_cabin_lidar)"/>
+        <arg name="using_boom_lidar"     value="$(arg using_boom_lidar)"/>
+        <arg name="using_gps"            value="$(arg using_gps)"/>
+        <arg name="using_cabin_imu"      value="$(arg using_cabin_imu)"/>
+        <arg name="using_reduced_model"  value="false"/>
+        <arg name="endeffector_type"     value="$(arg endeffector_type)"/>
+        <arg name="description_name"     value="$(arg description_name)"/>
+        <arg name="gazebo_config"        value="$(arg gazebo_config)"/>
+        <arg name="has_obstacle"         value="$(arg has_obstacle)"/>
+        <arg name="obstacle_name"        value="$(arg obstacle_name)"/>
+        <arg name="time_step"            value="$(arg time_step)"/>
+        <arg name="use_state_estimator"  value="$(arg use_state_estimator)"/>
+        <arg name="x"                    value="$(arg x)"/>
+        <arg name="y"                    value="$(arg y)"/>
+        <arg name="z"                    value="$(arg z)"/>
+        <arg name="roll"                 value="$(arg roll)"/>
+        <arg name="pitch"                value="$(arg pitch)"/>
+        <arg name="yaw"                  value="$(arg yaw)"/>
+        <arg name="paused"               value="$(arg paused)"/>
+        <arg name="use_sim_time"         value="$(arg use_sim_time)"/>
+        <arg name="gui"                  value="$(arg gui)"/>
+        <arg name="headless"             value="$(arg headless)"/>
+        <arg name="debug"                value="$(arg debug)"/>
+        <arg name="verbose"              value="$(arg verbose)"/>
+        <arg name="using_mega_ft"        value="$(arg using_mega_ft)"/>
+    </include>
+
+    <!-- Launch the highlevel controller -->
+    <include file="$(find m545_highlevel_controller)/launch/highlevel_controller.launch">
+        <arg name="description_name"    value="$(arg description_name)" />
+        <arg name="load_description"    value="false"/>
+        <arg name="simulation"          value="true" />
+        <arg name="time_step"           value="$(arg time_step)" />
+        <arg name="controllers_file"    value="$(arg controllers_file)" />
+        <arg name="track_offset_file" value="$(arg track_offset_file)" />
+        <arg name="endeffector_type"    value="$(arg endeffector_type)" />
+    </include>
+
+    <!-- Launch the state estimator -->
+    <include file="$(find m545_estimator_filtered)/launch/estimator_filtered.launch" if="$(arg use_state_estimator)">
+        <arg name="description_name"    value="$(arg description_name)" />
+        <arg name="load_description"    value="false"/>
+        <arg name="time_step"           value="$(arg time_step)" />
+        <arg name="standalone"          value="$(arg standalone)" />
+        <arg name="simulation"          value="true" />
+    </include>
+
+    <!-- Publish tf from robot state -->
+    <include file="$(find m545_rviz)/launch/tf_publisher.launch">
+        <arg name="description_name" value="$(arg description_name)"/>
+        <arg name="endeffector_type" value="$(arg endeffector_type)"/>
+    </include>
+
+    <!-- Launch RViz with the demo configuration -->
+    <include file="$(find m545_rviz)/launch/rviz.launch" if="$(arg use_rviz)">
+        <arg name="rviz_config" value="$(arg rviz_config)"/>
+    </include>
+
+    <!-- Launch the joy node -->
+    <include file="$(find m545_utils)/launch/joy.launch" if="$(arg use_joy)">
+        <arg name="joystick_name"       value="$(arg joystick_name)" />
+        <arg name="joystick_deadzone"   value="$(arg joystick_deadzone)" />
+    </include>
+
+    <!-- Launch the joy manager node -->
+    <include file="$(find m545_joymanager)/launch/joymanager.launch">
+  	    <arg name="joystick_type"   value="$(arg joystick_type)" />
+    </include>
+
+    <!-- Launch the gazebo2rviz package -->
+    <include file="$(find gazebo2rviz)/launch/gazebo2rviz.launch" if="$(arg use_gazebo2viz)">
+        <arg name="models_to_ignore"    value="m545" />
+    </include>
+
+  <!-- map packages -->
+  <rosparam command="load" file="$(find coverage_planner)/config/image_to_gridmap.yaml" />
+
+  <node pkg="coverage_planner" type="image_publisher.py" name="image_publisher" output="screen">
+    <param name="image_path" value="$(find coverage_planner)/data/map.jpg" />
+    <param name="topic" value="~image" />
+  </node>
+  
+  <node pkg="coverage_planner" type="image_to_gridmap" name="image_to_gridmap" output="screen" />
+
+  <node pkg="grid_map_visualization" type="grid_map_visualization" name="grid_map_visualization" output="screen" />
+
+    <!-- CAD Mouse >
+    <node respawn="true" pkg="spacenav_node" type="spacenav_node" name="m545_joystick" output="screen">
+        <remap from="/spacenav/joy" to="/m545_joystick"/>
+    </node-->
+
+
+</launch>
