@@ -61,6 +61,11 @@ class ImageToGridmap {
 
   //! Length of the grid map in x direction.
   double mapLengthX_;
+  double mapLengthY_;
+
+  // Offset
+  double mapOffsetY_ = 0.0;
+  double mapOffsetX_ = 0.0;
 
   //! Resolution of the grid map.
   double resolution_;

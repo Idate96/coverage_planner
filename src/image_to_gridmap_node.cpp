@@ -11,7 +11,6 @@ int main(int argc, char** argv) {
   ros::NodeHandle nh("~");
   std::string layer_name = "elevation";
   ImageToGridmap imageToGridmap(nh, layer_name);
-
   ros::spin();
   return 0;
 }

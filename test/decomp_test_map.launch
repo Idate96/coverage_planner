@@ -1,8 +1,5 @@
 <launch>
-  <!-- Launch the grid map tutorial demo node -->
   <test test-name="decomp_test_map" type="decomp_test_map.cpp" pkg="coverage_planner"/>
-  <!-- Launch RViz with the demo configuration -->
-
   <node pkg="coverage_planner" name="image_to_gridmap" type="image_to_gridmap" output="screen"/>
   <node pkg="grid_map_visualization" type="grid_map_visualization" name="grid_map_visualization" output="screen" />
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find coverage_planner)/rviz/image_to_gridmap.rviz" />

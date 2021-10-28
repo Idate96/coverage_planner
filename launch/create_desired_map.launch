@@ -1,0 +1,11 @@
+<launch>
+  <arg name="map_file" default="occupancy_map.bag"/>
+  <arg name="map_file_desired" default="desired_map.bag"/>
+
+  <param name="map_path" value="$(find coverage_planner)/data/$(arg map_file)"/>
+  <param name="desired_map_path" value="$(find coverage_planner)/data/$(arg map_file_desired)"/>
+  <param name="desired_elevation_change" value="5"/>
+  
+  <node pkg="coverage_planner" type="create_desired_map" name="create_desired_map" output="screen"/>
+  <!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(find coverage_planner)/rviz/test_decomp.rviz" /> -->
+</launch>

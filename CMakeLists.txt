@@ -69,14 +69,29 @@ target_link_libraries(image_to_gridmap
   ${catkin_LIBRARIES}
 )
 
+add_executable(create_desired_map
+        src/create_desired_map.cpp)
+
+target_link_libraries(create_desired_map
+        ${catkin_LIBRARIES})
+
+
 add_executable(load_map_bag
   test/load_map_bag.cpp
 )
+
 
 target_link_libraries(load_map_bag
   ${catkin_LIBRARIES}
 )
 
+add_executable(publish_map_bag
+  test/publish_map_bag.cpp
+)
+
+target_link_libraries(publish_map_bag
+  ${catkin_LIBRARIES}
+)
 #############
 ## Install ##
 #############

@@ -1,0 +1,8 @@
+<launch>
+    <param name="map_path" value="$(find coverage_planner)/data/desired_map.bag"/>
+    <param name="map_topic" value="/elevation_mapping/elevation_map"/>
+    <node pkg="coverage_planner" type="publish_map_bag" name="publish_map_bag" output="screen"/>
+    <node pkg="grid_map_visualization" type="grid_map_visualization" name="grid_map_visualization" output="screen" />
+    <node pkg="rviz" type="rviz" name="rviz" output="screen"/>
+</launch>
+        
