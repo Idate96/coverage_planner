@@ -32,7 +32,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
   INCLUDE_DIRS include
-#  LIBRARIES coverage_planner
+  LIBRARIES coverage_planner
   CATKIN_DEPENDS  
 #  DEPENDS system_lib
 )
