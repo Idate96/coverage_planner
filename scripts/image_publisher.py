@@ -44,6 +44,7 @@ def callback(self):
     rosimage.header.stamp = rospy.Time.now()
     rosimage.header.frame_id = 'map'
 
+    print("Publishing image...")
     publisher.publish(rosimage)
 
 
